@@ -1,4 +1,6 @@
-# Initialize a dictionary to store the levels from each report
+# Part 1
+# 
+# # Initialize a dictionary to store the levels from each report
 levels = {}
 
 # Open the input file containing the reports
@@ -47,4 +49,50 @@ for key, value in levels.items():
             safe_count += 1  
 
 # Print the total number of safe reports
-print(safe_count)
+print("Part1: ", safe_count)
+
+# Part 2
+#
+# Add a tracker for unsafe reports
+unsafe_ind = []
+# reset safe_count
+safe_count = 0
+# Iterate through each report in the levels dictionary
+for key, value in levels.items():
+    # Check if the report is either increasing or decreasing
+    if is_increasing(value) or is_decreasing(value):
+        # Check if all adjacent levels differ by 1 to 3
+        if all_elements_differ_by_one_to_three(value):
+            # Increment the safe report counter
+            safe_count += 1
+        else:
+            unsafe_ind.append(key)
+    else:
+        unsafe_ind.append(key)
+
+# brute force
+now_safe = 0
+now_safe_ind = []
+
+levels_test = levels.copy()
+
+for ind in unsafe_ind:
+    print("Testing index ", ind, "out of ", len(unsafe_ind))
+    report = levels_test.pop(ind)
+    change_safe = False
+    while change_safe == False:
+        for i in range(len(report)):
+            test_report = list(report)
+            test_report.pop(i)
+            if is_increasing(test_report) or is_decreasing(test_report):
+                if all_elements_differ_by_one_to_three(test_report):
+                    if ind not in now_safe_ind:
+                        now_safe_ind.append(ind)
+                        now_safe +=1
+                        change_safe = True
+        
+        change_safe = True
+
+print(now_safe, safe_count, now_safe + safe_count)
+
+    
