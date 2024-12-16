@@ -21,7 +21,6 @@ for i in range(len(instructions)):
 
 
 def test_instructs(pages):
-    # pages = [int(x) for x in pages.split(",")]
     for value in dict_insts.values():
         if value[0] in pages and value[1] in pages:
             if pages.index(value[0]) < pages.index(value[1]):
@@ -37,12 +36,31 @@ def get_middle(lst):
     middle = length // 2
     return lst[middle]
 
-
+# track bad updates
 mid_count = 0
-
+bad_list = []
 for update in updates:
     update = [int(x) for x in update.split(",")]
     if test_instructs(update):
         mid_count += get_middle(update)
+    else:
+        bad_list.append(update)
 
-print(mid_count)
+# new function to find instructions that flag bad
+def fix_bad(pages):
+    for value in dict_insts.values():
+        if value[0] in pages and value[1] in pages:
+            if pages.index(value[0]) < pages.index(value[1]):
+                continue
+            else:
+                hold = pages.pop(pages.index(value[0]))
+                pages.insert(pages.index(value[1]), hold)
+                # make recursive to fix all bads
+                fix_bad(pages)
+    return pages
+    
+bad_sum = 0
+for bad in bad_list:
+    bad_sum += get_middle(fix_bad(bad))
+
+print(bad_sum)
