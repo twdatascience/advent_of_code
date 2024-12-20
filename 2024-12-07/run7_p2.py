@@ -1,6 +1,6 @@
-# Day 7 Part 1
+# Day 7 Part 2
 from itertools import product
-import pdb
+
 
 # define functions
 def generate_operator_options(ops, number_ops):
@@ -12,11 +12,20 @@ def left_to_right(equation_list):
     # separate list by element into first 3 then every 2
     first_three = equation_list[:3]
     rest = equation_list[3:]
-    eq_value = eval("".join(first_three))
+
+    if first_three[1] == '||':
+        eq_value = int(first_three[0] + first_three[2])
+    else:
+        eq_value = eval("".join(first_three))
+    
     while len(rest) > 0:
         new_eq_part = rest[:2]
         rest = rest[2:]
-        eq_value = eval(str(eq_value) + "".join(new_eq_part))
+        
+        if new_eq_part[0] == '||':
+            eq_value = int(str(eq_value) + new_eq_part[1])
+        else:
+            eq_value = eval(str(eq_value) + "".join(new_eq_part))
     return eq_value
         
 
@@ -48,7 +57,7 @@ for i in range(len(lines)):
     variables = variables.strip().split(" ")
     lines_dict[i] = result, variables
 
-operators = ['+', '*']
+operators = ['+', '*', '||']
 total_cal = 0
 for values in lines_dict.values():
     result, variables = values
