@@ -1,6 +1,7 @@
 # Day 8 Part 1
 import re
 import itertools
+import math
 
 # define functions
 def find_nodes(point1, point2, max_row, max_col, antinodes_in):
@@ -12,27 +13,27 @@ def find_nodes(point1, point2, max_row, max_col, antinodes_in):
     rise = row2 - row1
     run_x = col2 - col1
 
-    test_nodes = []
-    for i in range(4):
-        if i == 0:
-            row = row1 + rise
-            col = col1 + run_x
-        elif i == 1:
-            row = row1 - rise
-            col = col1 - run_x
-        elif i == 2:
-            row = row2 + rise
-            col = col2 + run_x
-        elif i == 3:
-            row = row2 - rise
-            col = col2 - run_x
-        
-        if not (row == row1 and col == col1) and not (row == row2 and col == col2):
-            test_nodes.append((row, col))
+    gcd = math.gcd(rise, run_x)
 
-    for node in test_nodes:
-        if not (node[0] > max_row or node[0] < 0 or node[1] > max_col or node[1] < 0):
-            antinodes_in.add(node)
+    slope_rise = rise // gcd
+    slope_run = run_x // gcd
+
+    antinodes_in.add((row1, col1))
+    new_row = row1 + slope_rise
+    new_col = col1 + slope_run
+    while True:
+        if new_row > max_row or new_col > max_col or new_row < 0 or new_col < 0:
+            break
+        antinodes_in.add((new_row, new_col))
+        new_row += slope_rise
+        new_col += slope_run
+
+    while True:
+        new_row -= slope_rise
+        new_col -= slope_run
+        if new_row > max_row or new_col > max_col or new_row < 0 or new_col < 0:
+            break
+        antinodes_in.add((new_row, new_col))
     
     return antinodes_in
 
