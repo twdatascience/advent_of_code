@@ -1,5 +1,4 @@
-import pdb
-
+# Day 9 Part 1
 class disk_obj():
     def __init__(self, id, pos_start, mem_type):
         self.id = id
@@ -42,5 +41,3 @@ for backward in disk[::-1]:
                 backward.type = "free"
 
 print(sum(m.val() for m in disk))
-
-
