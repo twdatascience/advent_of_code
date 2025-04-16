@@ -6,13 +6,13 @@ import numpy as np
 with open("2024-12-04/input4.txt", "r") as f:
     lines = f.readlines()
 
-
+# create grid data frame of input
 df = pd.DataFrame([list(line) for line in lines])
 df = df.drop(df.columns[140], axis = 1)
 
 find_values = [r"XMAS", r"SAMX"]
 
-# find all values in rows
+# find all instances in rows
 row_count = 0
 for ind, row in df.iterrows():
     combined_row = "".join(row)
@@ -20,7 +20,7 @@ for ind, row in df.iterrows():
         matches = re.findall(pattern, combined_row)
         row_count += len(matches)
 
-# find all values in columns
+# find all instances in columns
 col_count = 0
 for column in df.columns:
     combined_column = "".join(df[column])
